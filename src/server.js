@@ -6,13 +6,17 @@ import http from "node:http";
 // PATCH => Atualizar uma informação específica de um recurso no back-end
 // DELETE => Deletar um recurso no back-end
 
+// Cabeçalhos (Requisicao Resposta) => Metadados
+
 const users = []
 
 const server = http.createServer((req, res) => {
     const { method, url } = req
 
     if (method === 'GET' && url === '/users') {
-        return res.end(users)
+        return res
+        .setHeader('Content-type', 'application/json')
+        .end(JSON.stringify(users))
     }
 
     if (method === 'POST' && url === '/users') {
@@ -22,11 +26,12 @@ const server = http.createServer((req, res) => {
             email: 'johndoe@gmail.com'
         })
 
-        return res.end('Criação de usuários')
+        return res.writeHead(201).end
     }
 
 
-    return res.end("Hello World");
+    return res.writeHead(404).end;
 });
 
 server.listen(3333);
+   
